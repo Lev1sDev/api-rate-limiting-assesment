@@ -1,0 +1,28 @@
+# Rust
+target/
+**/*.rs.bk
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+*.log
+
+# AI Assistant Files (should not be committed to prevent contaminating take-home assignments)
+CLAUDE.md
+
+# Test artifacts
+tarpaulin-report.html
+cobertura.xml
+
+# Database
+*.db
+*.sqlite

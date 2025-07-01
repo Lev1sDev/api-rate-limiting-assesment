@@ -1,0 +1,50 @@
+[package]
+name = "transaction-queue-api"
+version.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = "api"
+path = "src/main.rs"
+
+[dependencies]
+# Workspace dependencies
+postgres_models = { path = "../../libs/postgres_models" }
+redis_cache = { path = "../../libs/redis_cache" }
+
+# Framework
+axum = { workspace = true }
+tower = { workspace = true }
+tower-http = { workspace = true }
+tokio = { workspace = true }
+
+# Database
+diesel = { workspace = true }
+diesel-async = { workspace = true }
+bb8 = { workspace = true }
+
+# Redis
+redis = { workspace = true }
+deadpool-redis = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Logging
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+# Utils
+uuid = { workspace = true }
+chrono = { workspace = true }
+dotenvy = { workspace = true }
+
+[dev-dependencies]
+reqwest = { workspace = true }
+futures = "0.3"
+chrono = { workspace = true }

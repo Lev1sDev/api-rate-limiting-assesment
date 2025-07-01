@@ -1,0 +1,18 @@
+[alias]
+# Test aliases for easier execution
+test-integration = "test --test integration_test"
+test-rate-limiting = "test --test rate_limiting_test"
+test-queue = "test --test queue_management_test"
+test-edge = "test --test edge_cases_test"
+test-load = "test --test load_test --release -- --ignored --nocapture"
+
+# Run all non-performance tests
+test-all = "test --workspace --exclude=load_test"
+
+# Test with better output
+test-verbose = "test --workspace -- --nocapture"
+
+[env]
+# Test environment variables
+RUST_LOG = { value = "transaction_queue_api=debug,tower_http=debug", force = false }
+RUST_BACKTRACE = { value = "1", force = false }
