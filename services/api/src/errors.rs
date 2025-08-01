@@ -5,11 +5,13 @@ use axum::{
 };
 use serde_json::json;
 use std::fmt;
+use axum::http::HeaderMap;
 
 #[derive(Debug)]
 pub struct AppError {
     pub status: StatusCode,
     pub message: String,
+    pub headers: Option<HeaderMap>,
 }
 
 impl AppError {
@@ -17,6 +19,7 @@ impl AppError {
         Self {
             status,
             message: message.into(),
+            headers: None,
         }
     }
 
@@ -30,6 +33,11 @@ impl AppError {
 
     pub fn too_many_requests(message: impl Into<String>) -> Self {
         Self::new(StatusCode::TOO_MANY_REQUESTS, message)
+    }
+
+    pub fn with_headers(mut self, headers: HeaderMap) -> Self {
+        self.headers = Some(headers);
+        self
     }
 }
 
@@ -50,7 +58,17 @@ impl IntoResponse for AppError {
             }
         }));
 
-        (self.status, body).into_response()
+        let mut resp = (self.status, body).into_response();
+
+        // Add custom HEADERS
+        if let Some(headers) = self.headers {
+            let headers_mut = resp.headers_mut();
+            for (key, value) in headers.iter() {
+                headers_mut.insert(key, value.clone());
+            }
+        }
+
+        resp
     }
 }
 

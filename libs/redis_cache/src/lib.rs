@@ -3,6 +3,9 @@ use deadpool_redis::{redis::AsyncCommands, Config, Pool, Runtime};
 pub type RedisPool = Pool;
 pub type RedisConnection = deadpool_redis::Connection;
 
+pub const MAX_PRIORITY: i32 = 1000;
+pub const MIN_PRIORITY: i32 = -1000;
+
 #[derive(Debug, thiserror::Error)]
 pub enum RedisError {
     #[error("Redis pool error: {0}")]
@@ -126,8 +129,8 @@ impl QueueManager {
         let score = (1000 - priority) as f64 + (timestamp / 1e15); // Timestamp scaled to avoid affecting priority
         
         // Add to priority queue (sorted set)
-        let _: i32 = conn.zadd(&priority_queue_name, score, data).await?;
-        
+        let _: i32 = conn.zadd(&priority_queue_name, data, score).await?;
+
         // Get current position in priority order
         let position = self.get_priority_position(&priority_queue_name, data).await?;
         Ok(position)
